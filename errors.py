@@ -37,7 +37,7 @@ P = ParamSpec("P")
 def guarded(f: Callable[Concatenate[S, P], T]) ->\
     Callable[Concatenate[S | Err, P], T | Err]:
     """
-    The guarded decorator wraps functions.
+    The guarded decorator wraps a function.
     If the first argument of the wrapped function is an object of type Err,
     it returns that object.
     If the argument is an object of type other than Err,
