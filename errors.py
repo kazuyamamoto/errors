@@ -5,6 +5,8 @@ from typing import Self, TypeVar, ParamSpec, Concatenate
 
 
 class Err:
+    """Err is an error type that does not need to be raised."""
+
     def __init__(self, msg: str, cause: Exception | Self | None = None):
         self.message = msg
         self.cause = cause
@@ -32,7 +34,16 @@ T = TypeVar("T")
 P = ParamSpec("P")
 
 
-def through(f: Callable[Concatenate[S, P], T]) -> Callable[Concatenate[S | Err, P], T | Err]:
+def guarded(f: Callable[Concatenate[S, P], T]) ->\
+    Callable[Concatenate[S | Err, P], T | Err]:
+    """
+    The guarded decorator wraps functions.
+    If the first argument of the wrapped function is an object of type Err,
+    it returns that object.
+    If the argument is an object of type other than Err,
+    the original function is executed.
+    """
+
     def inner(arg: S | Err, *args: P.args, **kwargs: P.kwargs) -> T | Err:
         if isinstance(arg, Err):
             return arg

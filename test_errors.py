@@ -1,6 +1,6 @@
 import unittest
 
-from errors import Err, through
+from errors import Err, guarded
 
 
 class ErrTestCase(unittest.TestCase):
@@ -9,9 +9,9 @@ class ErrTestCase(unittest.TestCase):
         self.assertEqual("test_errors.py:8: hello world", str(err))
 
 
-class ThroughTestCase(unittest.TestCase):
+class GuardedDecoratorTestCase(unittest.TestCase):
     def test_arg1(self):
-        @through
+        @guarded
         def f(a: int):
             return a
 
@@ -22,7 +22,7 @@ class ThroughTestCase(unittest.TestCase):
         self.assertEqual("error in test", r2.message)
 
     def test_arg1_reterr(self):
-        @through
+        @guarded
         def f(a: int) -> int | Err:
             if a == 0:
                 return Err("error from f")
@@ -38,7 +38,7 @@ class ThroughTestCase(unittest.TestCase):
         self.assertEqual("error in test", r3.message)
 
     def test_arg2(self):
-        @through
+        @guarded
         def f(a: int, b: int) -> int:
             return a + b
 
@@ -49,7 +49,7 @@ class ThroughTestCase(unittest.TestCase):
         self.assertEqual("error in test", r2.message)
 
     def test_arg2_reterr(self):
-        @through
+        @guarded
         def f(a: int, b: int) -> int | Err:
             if a == 0:
                 return Err("error from f")
@@ -65,7 +65,7 @@ class ThroughTestCase(unittest.TestCase):
         self.assertEqual("error in test", r3.message)
 
     def test_kwarg1(self):
-        @through
+        @guarded
         def f(a: int, *, k: int) -> int:
             return a + k
 
@@ -76,7 +76,7 @@ class ThroughTestCase(unittest.TestCase):
         self.assertEqual("error in test", r2.message)
 
     def test_kwarg1_reterr(self):
-        @through
+        @guarded
         def f(a: int, *, k: int) -> int | Err:
             if k == 0:
                 return Err("error from f")
@@ -92,7 +92,7 @@ class ThroughTestCase(unittest.TestCase):
         self.assertEqual("error from f", r3.message)
 
     def test_kwarg2(self):
-        @through
+        @guarded
         def f(a: int, *, k: int, l: int) -> int:
             return a + k + l
 
@@ -103,7 +103,7 @@ class ThroughTestCase(unittest.TestCase):
         self.assertEqual("error in test", r2.message)
 
     def test_kwarg2_reterr(self):
-        @through
+        @guarded
         def f(a: int, *, k: int, l: int) -> int | Err:
             if k == 0:
                 return Err("error from f")
